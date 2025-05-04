@@ -1,0 +1,14 @@
+@startuml
+
+left to right direction
+
+usecase "Buy Ticket"
+actor "Car Driver"
+actor "Payment Service"
+"Car Driver" --> "Buy Ticket"
+"Buy Ticket" --> "Payment Service"
+
+"Parking Inspector" --> (Check Car)
+Administrator --> (Define Parking Rates)
+
+@enduml
