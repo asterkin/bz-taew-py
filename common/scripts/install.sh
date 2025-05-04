@@ -1,4 +1,4 @@
-sudo sudo dnf install -y fontconfig graphviz
+sudo sudo dnf install -y fontconfig graphviz git-subtree
 wget https://corretto.aws/downloads/latest/amazon-corretto-24-aarch64-linux-jdk.rpm
 sudo dnf localinstall -y amazon-corretto-24-aarch64-linux-jdk.rpm
 rm amazon-corretto-24-aarch64-linux-jdk.rpm
