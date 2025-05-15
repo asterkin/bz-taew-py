@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Docs](https://img.shields.io/badge/docs-📘%20available-blue)](./docs/README.md)
-[![Last Commit](https://img.shields.io/github/last-commit/asterkin/bluezone-app.svg)](https://github.com/asterkin/bluezone-app/commits/main)
+[![Last Commit](https://img.shields.io/badge/last--commit-private-lightgrey)](https://github.com/asterkin/bluezone-app/commits/main)
 ![Platform](https://img.shields.io/badge/platform-Linux-green)
 
 This repository contains **programming language-neutral specifications and assets** for the BlueZone sample application, demonstrating the “Ports and Adapters” architecture pattern featured in the [*Hexagonal Architecture Explained*](https://store7710079.company.site/Hexagonal-Architecture-Explained-p655931616) book.

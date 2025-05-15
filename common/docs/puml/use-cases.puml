@@ -2,13 +2,18 @@
 
 left to right direction
 
-usecase "Buy Ticket"
 actor "Car Driver"
 actor "Payment Service"
+actor "System Clock"
+
+usecase "Buy Ticket"
 "Car Driver" --> "Buy Ticket"
 "Buy Ticket" --> "Payment Service"
+"Buy Ticket" --> "System Clock"
 
-"Parking Inspector" --> (Check Car)
+usecase "Check Car"
+"Parking Inspector" --> "Check Car"
+"Check Car" --> "System Clock"
 Administrator --> (Define Parking Rates)
 
 @enduml
