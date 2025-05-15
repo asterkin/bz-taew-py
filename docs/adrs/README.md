@@ -11,16 +11,17 @@ To learn more about ADRs and their benefits, you can refer to the original ADR p
 
 ## ADRs Table of Contents
 
-| ADR Number                                                                  | Title                                                                                | Status   | Date       |
-|-----------------------------------------------------------------------------|--------------------------------------------------------------------------------------|----------|------------|
-| [ADR-001](./adr-001-apply-ports-and-adapters-pattern.md)                    | Apply "Ports and Adapters" Architecture Pattern                                      | Accepted | 2024-09-17 |
-| [ADR-002](./adr-002-specify-port-interfaces-as-function-protocols.md)       | Specify Port Interfaces as Function Resolution Protocols and Group by External Actor | Accepted | 2024-09-05 |
-| [ADR-003](./adr-003-define-sample-type-as-iterable-float.md)                | Define `Sample` Type as `Iterable[float]`                                            | Accepted | 2024-09-05 |
-| [ADR-004](./adr-004-use-google-style-pydoc-format.md)                       | Use Google Style pydoc Format                                                        | Accepted | 2024-09-05 |
-| [ADR-005](./adr-005-insulate-application-logic-from-calculation-engine.md)  | Insulate Application Logic from Calculation Engine through a Secondary Port          | Accepted | 2024-09-05 |
-| [ADR-006](./adr-006-encapsulate-python-builttin-types-within-port-types.md) | Encapsulate Python Built-in Types Within Port Types                                  | Accepted | 2024-09-06 |
-| [ADR-007](./adr-007-domain-model.md)                                        | Domain Model for CypherAI Verity Matcher                                             | Accepted | 2024-09-17 |
-| [ADR-008](./adr-008-selected-toolset.md)                                    | Selected Toolset for CypherAI Verity Matcher Project                                 | Accepted | 2024-09-17 |
+| ADR Number                                                                             | Title                                                                                                      | Status   |
+|----------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|----------|
+| [ADR-000](./adr-000-use-adrs-to-document-all-architecturally-significant-decisions.md) | Use Architecture Decision Records (ADRs) to Document All Architecturally Significant Decisions             | Accepted |
+| [ADR-001](./adr-001-plantuml-for-architecture-diagrams.md)                             | Use PlantUML for Architecture Diagrams                                                                     | Accepted |
+| [ADR-002](./adr-002-apply-ports-and-adapters-pattern.md)                               | Apply "Ports and Adapters" Architecture Pattern                                                            | Accepted |
+| [ADR-003](./adr-003-use-separate-repositories-with-git-subtree.md)                     | Use Separate Repositories with Git Subtree for Shared Specifications and Language-Specific Implementations | Accepted |
+| [ADR-004](./adr-004-use-gherkin-for-acceptance-test-specifications.md)                 | Use Gherkin for Acceptance Test Specifications                                                             | Accepted |
+| [ADR-005](./adr-005-bluezone-application-ports.md)                                     | BlueZone Application Ports                                                                                 | Accepted |
+| [ADR-006](./adr-006-support-strong-type-checking-without inforcing-it.md)              | Provide Full Support for Strong Typing Without Enforcing It                                                | Accepted |
+| [ADR-007](./adr-007-postpone-formal-templates-for-adrs-and-feature-tests.md)           | Postpone Formal Templates for ADRs and Feature Tests                                                       | Accepted |
+| [ADR-008](./adr-008-use-world-tags-in-feature-tests.md)                                | Use World Tags in Feature Tests to Support Strong Typing Without Enforcing It                              | Accepted |
 
 ---
 

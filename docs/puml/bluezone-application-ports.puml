@@ -1,0 +1,40 @@
+@startuml
+left to right direction
+component BlueZone <<application>> {
+portin "ForCarDrivers" as ForCarDrivers_in
+portin "ForParkingInspectors" as ForParkingInspectors_in
+portin "ForAdministrators" as ForAdministrators_in
+portout "ForPayments" as ForPayments_out
+portout "ForStoringTickets" as ForStoringTickets_out
+portout "ForStoringParkingRates" as ForStoringParkingRates_out
+portout "ForObtainingDateTime" as ForObtainingDateTime_out
+}
+actor "Car Driver"
+component CarDriverUI <<adapter>>
+"Car Driver" --> CarDriverUI
+CarDriverUI -(0- ForCarDrivers_in
+actor "Parking Inspector"
+component ParkingInspectorUI <<adapter>>
+"Parking Inspector" --> ParkingInspectorUI
+ParkingInspectorUI-(0- ForParkingInspectors_in
+actor Administrator
+component AdministratorUI <<adapter>>
+Administrator --> AdministratorUI
+AdministratorUI-(0- ForAdministrators_in
+component PaymentServiceClient <<adapter>>
+ForPayments_out -(0- PaymentServiceClient
+actor PaymentService
+PaymentServiceClient --> PaymentService
+component TicketsRepository <<adapter>>
+ForStoringTickets_out -(0- TicketsRepository
+database TicketsStore
+TicketsRepository --> TicketsStore
+component ParkingRatesRepository <<adapter>>
+ForStoringParkingRates_out -(0- ParkingRatesRepository
+database ParkingRatesStore
+ParkingRatesRepository --> ParkingRatesStore
+component SystemClockClient <<adapter>>
+ForObtainingDateTime_out -(0- SystemClockClient
+actor "System Clock"
+SystemClockClient --> "System Clock"
+@enduml
