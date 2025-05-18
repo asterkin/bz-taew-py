@@ -14,4 +14,8 @@ all-diagrams: $(DIAGRAM_FILES)
 # For some reason, the output should be relative to the puml file
 $(DIAGRAMS_DIR)/%.png: $(PUML_DIR)/%.puml
 	@echo "Generating diagram for $<..."
-	@./scripts/plantuml.sh ./$< -o ../diagrams/ 
+	@./scripts/plantuml.sh ./$< -o ../diagrams/
+
+pull:
+	./common/scripts/pull.sh
+	
