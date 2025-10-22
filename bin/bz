@@ -1,0 +1,23 @@
+#!.venv/bin/python3
+
+import sys
+from taew.ports.for_starting_programs import Main
+from configuration import ports_root, launch_ports
+from taew.adapters.launch_time.for_binding_interfaces import Bind
+
+
+def main() -> None:
+    try:
+        bind = Bind(_root=ports_root)
+        # Dynamically bind the Main interface
+        _main = bind(Main, ports=launch_ports)
+        
+        # Run _main with command line arguments
+        _main(sys.argv)
+        
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()

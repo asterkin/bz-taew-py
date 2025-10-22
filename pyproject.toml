@@ -1,0 +1,39 @@
+[project]
+name = "bluezone-py"
+version = "0.1.0"
+description = "Canonical 'Ports and Adapters' application developed on the top of taew-py libarary"
+authors = [{ name = "Asher Sterkin", email = "asher.sterkin@gmail.com" }]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.13"
+dependencies = [
+    "faker>=37.11.0",
+    "taew",
+]
+
+[dependency-groups]
+dev = [
+    "coverage>=7.6.1",
+    "faker>=33.1.0",
+    "mypy>=1.11.2",
+    "pynode>=0.1.0",
+    "pyright>=1.1.406",
+    "ruff>=0.11.11",
+]
+
+[tool.mypy]
+explicit_package_bases = true
+strict = true
+disable_error_code = [
+    "unused-ignore", 
+    "type-abstract",
+    "import-untyped"
+]
+namespace_packages = true
+
+[tool.uv.sources]
+taew = { git = "https://github.com/asterkin/taew-py.git", branch = "main" }
+
+[tool.pyright]
+typeCheckingMode = "strict"
+useLibraryCodeForTypes = true
