@@ -2,92 +2,122 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Project Overview
+
+This is the **bluezone-app-py** project - a Python implementation of the BlueZone parking ticket application, showcasing the "Ports and Adapters" architecture pattern. This project builds upon the [bluezone-app](https://github.com/asterkin/bluezone-app) repository (included as a subtree under `common/`) and uses the [taew-py](https://github.com/asterkin/taew-py) library for the Ports & Adapters framework.
+
 ## Development Commands
 
-This project uses UV for dependency management and Makefiles for task automation. Each subpackage has its own Makefile with consistent targets:
+This project uses UV for dependency management and a root-level Makefile for task automation.
 
 ### Testing and Coverage
-- `make test-unit` - Run unit tests using unittest discovery
+- `make test-unit` - Run unit tests using unittest discovery from `./test` directory
 - `make coverage` - Run full test suite with coverage analysis
 - `make erase-coverage` - Clean coverage data
+- `make combine-coverage` - Combine coverage data from parallel test runs
+- `make report-coverage` - Display coverage report
 
 ### Static Analysis
 - `make static` - Run all static analysis tools (ruff, mypy, pyright)
-- `make ruff-check` - Run ruff linting (use `uvx ruff check`)
-- `make ruff-format` - Run ruff formatting (use `uvx ruff format`)
-- `make mypy` - Run MyPy type checking
-- `make pyright` - Run Pyright type checking
+- `make ruff-check` - Run ruff linting (excludes `./typings`)
+- `make ruff-format` - Run ruff formatting
+- `make mypy` - Run MyPy type checking on source and `./bin/bz`
+- `make pyright` - Run Pyright type checking on source and `./bin/bz`
+
+### Benchmarks
+- `make benchmark` - Run performance benchmarks (currently: ticket storage)
 
 ### Development Workflow
-Run `make all` from any subpackage directory to execute the complete pipeline (static analysis + testing with coverage).
-
-Key directories with Makefiles:
-- `core/` - Core taew library
-- `cli/` - CLI adapters
-- `python/argparse/for_building_command_parsers/`
-- `python/inspect/for_browsing_code_tree/`
-- `python/pprint/for_serializing_objects/`
-- `python/ram/for_browsing_code_tree/`
-- `launch_time/for_binding_interfaces/`
+- `make sync` - Sync dependencies using `uv sync`
+- `make all` - Execute complete pipeline: sync, static analysis, coverage, and benchmarks
 
 ## Architecture
 
-This codebase implements the **Ports & Adapters (Hexagonal Architecture)** pattern for the taew-py library. The architecture separates core business logic from external dependencies through well-defined interfaces.
+This application implements the **Ports & Adapters (Hexagonal Architecture)** pattern using the [taew-py](https://github.com/asterkin/taew-py) framework. The architecture separates the BlueZone parking domain logic from external dependencies through well-defined interfaces (ports).
 
-### Core Components
+### Project Structure
 
-**Domain Layer** (`core/taew/domain/`):
-- `function.py` - Function invocation error handling
-- `argument.py` - Argument type definitions and metadata
-- `configuration.py` - Port configuration and application configuration types
+```
+bluezone-app-py/
+├── domain/              # BlueZone domain models
+│   ├── payment_card.py  # Payment card value object
+│   ├── rate.py          # Parking rate value object
+│   └── ticket.py        # Parking ticket entity
+├── ports/               # Port interfaces for external dependencies
+│   ├── for_car_drivers.py         # Interface for car driver operations
+│   ├── for_making_payments.py     # Payment processing interface
+│   ├── for_parking_inspectors.py  # Parking inspector operations
+│   ├── for_storing_rates.py       # Rate storage interface
+│   └── for_storing_tickets.py     # Ticket storage interface
+├── adapters/            # Adapter implementations
+│   ├── cli/             # CLI-specific adapters
+│   ├── dir/             # Directory-based storage adapters
+│   └── ram/             # In-memory storage adapters
+├── workflows/           # Application workflows (use cases)
+├── test/                # Unit and integration tests
+├── bin/                 # Executable scripts
+│   └── bz               # Main CLI entry point
+├── configuration.py     # Port-to-adapter wiring configuration
+└── common/              # Shared specifications from bluezone-app (subtree)
+```
 
-**Ports Layer** (`core/taew/ports/`):
-- Defines interfaces that adapters must implement
-- `for_binding_interfaces.py` - Interface binding protocols
-- `for_browsing_code_tree.py` - Code structure navigation protocols
-- `for_building_command_parsers.py` - Command parser construction protocols
-- `for_creating_class_instances.py` - Class instantiation protocols
-- `for_serializing_objects.py` - Object serialization protocols
-- `for_starting_programs.py` - Program execution protocols
+### Domain Layer
 
-### Adapter Structure
+**Domain Models** (`domain/`):
+- `payment_card.py` - Represents payment card details (card number, CVV, expiry)
+- `rate.py` - Parking rate information (zone, hourly rate)
+- `ticket.py` - Parking ticket (registration, zone, payment details, timestamps)
 
-Adapters are organized by technology and purpose:
+These models contain the core business logic and are independent of any infrastructure concerns.
 
-**CLI Adapters** (`cli/taew/adapters/cli/`):
-- `for_starting_programs.py` - Main CLI entry point implementing command discovery and execution
+### Ports Layer
 
-**Python Standard Library Adapters**:
-- `python/argparse/` - Command parser construction using argparse
-- `python/inspect/` - Code tree browsing using Python's inspect module
-- `python/pprint/` - Object serialization using pprint
-- `python/ram/` - In-memory code tree representation
+**Port Interfaces** (`ports/`):
+Defines the contracts that adapters must implement to provide infrastructure capabilities:
 
-**Launch-time Adapters** (`launch_time/`):
-- `for_binding_interfaces/` - Runtime interface binding
-- `for_creating_class_instances/` - Dynamic class instantiation
+- `for_car_drivers.py` - Operations for car drivers (check parking, buy tickets)
+- `for_making_payments.py` - Payment processing capabilities
+- `for_parking_inspectors.py` - Ticket verification for inspectors
+- `for_storing_rates.py` - Rate persistence interface
+- `for_storing_tickets.py` - Ticket persistence interface
+
+All ports use Python protocols for type safety and follow dependency inversion principles.
+
+### Adapter Layer
+
+**Adapter Implementations** (`adapters/`):
+
+- **CLI Adapters** (`adapters/cli/`) - Command-line interface implementations
+- **Directory Storage** (`adapters/dir/`) - File system-based persistence
+- **RAM Storage** (`adapters/ram/`) - In-memory storage for testing/development
+
+Adapters are configured in `configuration.py` using the taew-py framework's port binding system.
+
+### CLI Application
+
+**Entry Point** (`bin/bz`):
+The main CLI executable that:
+1. Loads port configuration from `configuration.py`
+2. Uses taew-py's `Bind` mechanism to wire ports to adapters
+3. Delegates to taew-py's CLI framework for command routing and execution
+
+The CLI automatically discovers commands from the workflow layer and provides a dynamic command-line interface.
+
+### Configuration
+
+**Port Wiring** (`configuration.py`):
+Defines `ports_root` and `launch_ports` to map port interfaces to their adapter implementations. This configuration drives the dependency injection at application startup.
 
 ### Key Design Patterns
 
-1. **Protocol-Based Interfaces**: All ports use Python protocols for type safety
-2. **Dependency Injection**: Configuration-driven adapter selection via `PortsMapping`
-3. **Command Pattern**: CLI commands map to functions/classes through code tree navigation
-4. **Type Safety**: Strict MyPy and Pyright configurations ensure type correctness
+1. **Hexagonal Architecture**: Domain logic isolated from infrastructure via ports
+2. **Dependency Inversion**: Domain depends on port abstractions, not concrete adapters
+3. **Protocol-Based Interfaces**: All ports use Python protocols for type safety
+4. **Dependency Injection**: taew-py's `Bind` mechanism wires adapters at runtime
+5. **Type Safety**: Strict MyPy and Pyright configurations ensure correctness
 
-### Configuration System
-
-The system uses `AppConfiguration` and `PortConfiguration` types to wire adapters:
-- `PortsMapping` associates port modules with their adapter implementations
-- Supports nested port configurations for composite adapters
-- Optional keyword arguments for adapter customization
-
-### CLI Command Resolution
-
-The CLI adapter (`cli/taew/adapters/cli/for_starting_programs.py`) implements a sophisticated command resolution system:
-1. Parses command arguments into a navigation path
-2. Traverses the code tree using the browsing port
-3. Resolves functions, classes, and callable instances
-4. Builds argument parsers dynamically based on function signatures
-5. Executes commands and serializes results
-
-This architecture enables adding new technologies (databases, web frameworks, etc.) by implementing the corresponding port interfaces without modifying core logic.
+This architecture enables:
+- Easy substitution of adapters (e.g., swap RAM storage for database storage)
+- Testing domain logic independently of infrastructure
+- Adding new capabilities by implementing port interfaces
+- Multiple adapter implementations for the same port (e.g., RAM vs. directory storage)

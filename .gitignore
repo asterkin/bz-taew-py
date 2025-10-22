@@ -128,7 +128,8 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+# .env tracked for this project - contains PYTHONPATH configuration
+#.env
 .venv
 env/
 venv/
