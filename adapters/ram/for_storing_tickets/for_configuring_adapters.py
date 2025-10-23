@@ -6,9 +6,11 @@ from taew.adapters.python.ram.for_storing_data.for_configuring_adapters import (
     Configure as ConfigureBase,
 )
 
+from domain.ticket import Ticket
+
 
 @dataclass(eq=False, frozen=True)
-class Configure(ConfigureBase):
+class Configure(ConfigureBase[str, Ticket]):
     """Configurator for RAM-based tickets storage.
 
     Application-level configurator that sets proper package/file paths

@@ -1,7 +1,6 @@
 """Configurator for RAM-based rates storage."""
 
 from dataclasses import dataclass
-from typing import cast
 
 from taew.adapters.python.ram.for_storing_data.for_configuring_adapters import (
     Configure as ConfigureBase,
@@ -11,7 +10,7 @@ from domain.rate import Rate
 
 
 @dataclass(eq=False, frozen=True)
-class _Configure(ConfigureBase):
+class _Configure(ConfigureBase[str, Rate]):
     """Configurator for RAM-based rates storage.
 
     Application-level configurator that sets proper package/file paths
@@ -33,4 +32,4 @@ def Configure(**kwargs: Rate) -> _Configure:
     Returns:
         Configurator for RAM-based rates storage.
     """
-    return _Configure(_values=cast(dict[str, object], kwargs))
+    return _Configure(_values=kwargs)
