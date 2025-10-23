@@ -1,10 +1,10 @@
+"""Mutable tickets repository adapter."""
+
 from typing import TypeAlias
 from domain.ticket import Ticket
-from taew.adapters.python.ram.for_storing_data import (
-    DataRepository,
+from taew.adapters.python.ram.for_storing_data.mutable_data_repository import (
     MutableDataRepository,
 )
 
 
-TicketsRepository: TypeAlias = DataRepository[str, Ticket]
 MutableTicketsRepository: TypeAlias = MutableDataRepository[str, Ticket]

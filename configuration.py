@@ -17,9 +17,11 @@ from taew.adapters.python.json.for_stringizing_objects.for_configuring_adapters 
 from adapters.dir.for_storing_tickets.for_configuring_adapters import (
     Configure as ConfigureTickets,
 )
+from adapters.ram.for_storing_rates.for_configuring_adapters import (
+    Configure as ConfigureRates,
+)
 
 from ports import (
-    for_storing_rates,
     for_making_payments,
     for_car_drivers,
     for_parking_inspectors,
@@ -55,37 +57,35 @@ def _config_logger(name: str) -> PortsMapping:
     }
 
 
-ports: PortsMapping = {  # type: ignore[assignment]
-    for_storing_rates: PortConfigurationDict(
-        adapter="adapters.ram",
-        kwargs=dict(
-            kwargs=dict(
-                Blue=Rate(name="Blue", euros_per_hour=Decimal("0.80")),
-                Green=Rate(name="Green", euros_per_hour=Decimal("0.85")),
-                Orange=Rate(name="Orange", euros_per_hour=Decimal("0.75")),
-            )
+ports: PortsMapping = (
+    {  # type: ignore[assignment]
+        for_making_payments: "adapters.ram",
+        for_obtaining_current_datetime: PortConfigurationDict(
+            adapter="taew.adapters.python.datetime",
+            root=TAEW_ROOT,
         ),
-    ),
-    for_making_payments: "adapters.ram",
-    for_obtaining_current_datetime: PortConfigurationDict(
-        adapter="taew.adapters.python.datetime",
-        root=TAEW_ROOT,
-    ),
-    for_car_drivers: PortConfigurationDict(
-        adapter="workflows",
-        kwargs=dict(_min_euros=Decimal("0.50")),
-        ports=_config_logger("Port: for_car_drivers"),
-    ),
-    for_parking_inspectors: PortConfigurationDict(
-        adapter="workflows",
-        ports=_config_logger("Port: for_parking_inspectors"),
-    ),
-} | ConfigureTickets(
-    _folder=TICKETS_FOLDER,
-    _extension="pkl",
-    _serialization=ConfigurePickle(),
-    _key_type=str,
-)()
+        for_car_drivers: PortConfigurationDict(
+            adapter="workflows",
+            kwargs=dict(_min_euros=Decimal("0.50")),
+            ports=_config_logger("Port: for_car_drivers"),
+        ),
+        for_parking_inspectors: PortConfigurationDict(
+            adapter="workflows",
+            ports=_config_logger("Port: for_parking_inspectors"),
+        ),
+    }
+    | ConfigureRates(
+        Blue=Rate(name="Blue", euros_per_hour=Decimal("0.80")),
+        Green=Rate(name="Green", euros_per_hour=Decimal("0.85")),
+        Orange=Rate(name="Orange", euros_per_hour=Decimal("0.75")),
+    )()
+    | ConfigureTickets(
+        _folder=TICKETS_FOLDER,
+        _extension="pkl",
+        _serialization=ConfigurePickle(),
+        _key_type=str,
+    )()
+)
 
 ports_root = Root(Path("./"))
 

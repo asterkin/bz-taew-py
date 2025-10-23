@@ -10,7 +10,7 @@ from ports.for_storing_rates import RatesRepository as RatesRepositoryProtocol
 
 def _get_rates() -> RatesRepositoryProtocol:
     """Factory method to create a RAM-based rates repository with sample data."""
-    from adapters.ram.for_storing_rates import RatesRepository
+    from adapters.ram.for_storing_rates.rates_repository import RatesRepository
     from decimal import Decimal
 
     repository = RatesRepository()
@@ -82,7 +82,7 @@ class TestGetRates(unittest.TestCase):
     def test_returns_empty_iterable_when_repository_is_empty(self) -> None:
         """Test that GetRates returns empty iterable when repository has no rates."""
         # Given
-        from adapters.ram.for_storing_rates import RatesRepository
+        from adapters.ram.for_storing_rates.rates_repository import RatesRepository
 
         empty_repository: RatesRepositoryProtocol = RatesRepository()
         logger, _ = _get_logger()
@@ -97,7 +97,7 @@ class TestGetRates(unittest.TestCase):
     def test_workflow_preserves_rate_order(self) -> None:
         """Test that GetRates preserves the order from repository values()."""
         # Given
-        from adapters.ram.for_storing_rates import RatesRepository
+        from adapters.ram.for_storing_rates.rates_repository import RatesRepository
 
         rate1 = Rate(name="First", euros_per_hour=Decimal("1.00"))
         rate2 = Rate(name="Second", euros_per_hour=Decimal("2.00"))

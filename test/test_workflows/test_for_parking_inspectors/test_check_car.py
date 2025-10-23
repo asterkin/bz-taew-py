@@ -14,7 +14,7 @@ from taew.ports.for_obtaining_current_datetime import Now as NowProtocol
 
 def _get_rates() -> RatesRepositoryProtocol:
     """Factory method to create a RAM-based rates repository with sample data."""
-    from adapters.ram.for_storing_rates import RatesRepository
+    from adapters.ram.for_storing_rates.rates_repository import RatesRepository
 
     repository = RatesRepository()
     zone_a_rate = Rate(name="Zone A", euros_per_hour=Decimal("2.00"))
@@ -29,7 +29,7 @@ def _get_tickets_repository(
     tickets: list[Ticket] | None = None,
 ) -> TicketsRepositoryProtocol:
     """Factory method to create a RAM-based tickets repository with sample data."""
-    from adapters.ram.for_storing_tickets import TicketsRepository
+    from adapters.ram.for_storing_tickets.tickets_repository import TicketsRepository
 
     repository = TicketsRepository()
 

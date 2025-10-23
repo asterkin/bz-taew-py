@@ -11,7 +11,7 @@ from ports.for_storing_tickets import (
     MutableTicketsRepository as MutableTicketsRepositoryProtocol,
 )
 from ports.for_storing_rates import RatesRepository as RatesRepositoryProtocol
-from adapters.ram.for_storing_tickets import (
+from adapters.ram.for_storing_tickets.tickets_repository import (
     TicketsRepository as TicketsRepositoryProtocol,
 )
 from taew.ports.for_logging import Logger as LoggerProtocol
@@ -20,7 +20,7 @@ from taew.ports.for_obtaining_current_datetime import Now as NowProtocol
 
 def _get_rates() -> RatesRepositoryProtocol:
     """Factory method to create a RAM-based rates repository with sample data."""
-    from adapters.ram.for_storing_rates import RatesRepository
+    from adapters.ram.for_storing_rates.rates_repository import RatesRepository
 
     repository = RatesRepository()
     zone_a_rate = Rate(name="Zone A", euros_per_hour=Decimal("2.00"))
@@ -31,7 +31,9 @@ def _get_rates() -> RatesRepositoryProtocol:
 
 def _get_mutable_tickets() -> MutableTicketsRepositoryProtocol:
     """Factory method to create a RAM-based mutable tickets repository."""
-    from adapters.ram.for_storing_tickets import MutableTicketsRepository
+    from adapters.ram.for_storing_tickets.mutable_tickets_repository import (
+        MutableTicketsRepository,
+    )
 
     return MutableTicketsRepository()
 
@@ -43,7 +45,7 @@ def _get_tickets_repository_from_mutable(
 
     This validates that both RAM adapters work correctly and allows test verification.
     """
-    from adapters.ram.for_storing_tickets import TicketsRepository
+    from adapters.ram.for_storing_tickets.tickets_repository import TicketsRepository
 
     # Create TicketsRepository and copy data from mutable repository
     return TicketsRepository(mutable_repo)  # type: ignore
