@@ -8,7 +8,7 @@ all: sync static coverage benchmark
 
 sync:
 	@echo "Syncing dependencies..."
-	@uv sync
+	@uv sync --upgrade
 
 coverage: erase-coverage test-unit combine-coverage report-coverage
 

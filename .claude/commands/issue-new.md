@@ -7,15 +7,25 @@ Parse the user's request to extract:
 - **title**: Issue title (may be quoted or unquoted)
 - **body**: Optional issue description (may be quoted or unquoted)
 
-Expected user input format:
+The command supports two input formats:
+
+**Format 1: Quoted strings**
 ```
 /issue-new <label> "<title>" ["<body>"]
 ```
-
 Examples:
 - `/issue-new enhancement "Add Redis adapter" "Support pub/sub patterns"`
 - `/issue-new bug "Fix serialization error" "Nested tuples fail to serialize"`
 - `/issue-new documentation "Update API documentation"`
+
+**Format 2: Comma-separated**
+```
+/issue-new <label>, <title>[, <body>]
+```
+Examples:
+- `/issue-new enhancement, Add Redis adapter, Support pub/sub patterns`
+- `/issue-new bug, Fix serialization error, Nested tuples fail to serialize`
+- `/issue-new documentation, Update API documentation`
 
 Execute the script:
 ```bash
