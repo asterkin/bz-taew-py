@@ -6,6 +6,7 @@ from domain.rate import Rate
 import site
 from domain.payment_card import PaymentCard
 from taew.domain.configuration import PortConfigurationDict, PortsMapping
+from taew.utils.ports import build
 from taew.adapters.python.inspect.for_browsing_code_tree.root import Root
 from taew.adapters.python.pickle.for_serializing_objects.for_configuring_adapters import (
     Configure as ConfigurePickle,
@@ -13,8 +14,8 @@ from taew.adapters.python.pickle.for_serializing_objects.for_configuring_adapter
 from taew.adapters.python.json.for_stringizing_objects.for_configuring_adapters import (
     Configure as ConfigureJSON,
 )
-from taew.adapters.python.logging.for_logging.for_configuring_adapters import (
-    Configure as ConfigureLogging,
+from taew.adapters.python.decimal.for_stringizing_objects.for_configuring_adapters import (
+    Configure as ConfigureDecimal,
 )
 from taew.adapters.python.ram.for_obtaining_current_datetime.for_configuring_adapters import (
     Configure as ConfigureCurrentDateTime,
@@ -25,12 +26,16 @@ from adapters.dir.for_storing_tickets.for_configuring_adapters import (
 from adapters.ram.for_storing_rates.for_configuring_adapters import (
     Configure as ConfigureRates,
 )
-
-from ports import (
-    for_making_payments,
-    for_car_drivers,
-    for_parking_inspectors,
+from adapters.ram.for_making_payments.for_configuring_adapters import (
+    Configure as ConfigureMakingPayments,
 )
+from workflows.for_car_drivers.for_configuring_adapters import (
+    Configure as ConfigureCarDrivers,
+)
+from workflows.for_parking_inspectors.for_configuring_adapters import (
+    Configure as ConfigureParkingInspectors,
+)
+
 from taew.ports import (
     for_starting_programs,
     for_stringizing_objects,
@@ -43,31 +48,22 @@ TICKETS_FOLDER = Path("/tmp/tickets")
 TAEW_ROOT = site.getsitepackages()[0]
 
 
-ports: PortsMapping = (
-    {  # type: ignore[assignment]
-        for_making_payments: "adapters.ram",
-        for_car_drivers: PortConfigurationDict(
-            adapter="workflows",
-            kwargs=dict(_min_euros=Decimal("0.50")),
-            ports=ConfigureLogging(_name="Port: for_car_drivers")(),
-        ),
-        for_parking_inspectors: PortConfigurationDict(
-            adapter="workflows",
-            ports=ConfigureLogging(_name="Port: for_parking_inspectors")(),
-        ),
-    }
-    | ConfigureCurrentDateTime()()
-    | ConfigureRates(
+ports = build(
+    ConfigureMakingPayments(),
+    ConfigureCarDrivers(_min_euros=Decimal("0.50")),
+    ConfigureParkingInspectors(),
+    ConfigureCurrentDateTime(),
+    ConfigureRates(
         Blue=Rate(name="Blue", euros_per_hour=Decimal("0.80")),
         Green=Rate(name="Green", euros_per_hour=Decimal("0.85")),
         Orange=Rate(name="Orange", euros_per_hour=Decimal("0.75")),
-    )()
-    | ConfigureTickets(
+    ),
+    ConfigureTickets(
         _folder=TICKETS_FOLDER,
         _extension="pkl",
         _serialization=ConfigurePickle(),
         _key_type=str,
-    )()
+    ),
 )
 
 ports_root = Root(Path("./"))
@@ -103,10 +99,7 @@ launch_ports: PortsMapping = {
         ports={
             for_stringizing_objects: PortConfigurationDict(
                 adapter={
-                    Decimal: PortConfigurationDict(
-                        adapter="taew.adapters.python.decimal",
-                        root=TAEW_ROOT,
-                    ),
+                    Decimal: ConfigureDecimal()()[for_stringizing_objects],
                     PaymentCard: ConfigureJSON(
                         _type=PaymentCard,
                         _variants={date: {"_variant": "isoformat", "_format": "%m/%y"}},
