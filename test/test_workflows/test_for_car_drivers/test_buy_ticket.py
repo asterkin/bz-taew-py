@@ -53,7 +53,7 @@ def _get_tickets_repository_from_mutable(
 
 def _get_pay_adapter() -> PayProtocol:
     """Factory method to create a RAM-based payment adapter."""
-    from adapters.ram.for_making_payments import Pay
+    from adapters.ram.for_making_payments.pay import Pay
 
     # Use fixed response for deterministic testing
     return Pay(_response="test-payment-id-12345")
@@ -61,7 +61,7 @@ def _get_pay_adapter() -> PayProtocol:
 
 def _get_pay_adapter_with_exception(exception: Exception) -> PayProtocol:
     """Factory method to create a RAM-based payment adapter that raises an exception."""
-    from adapters.ram.for_making_payments import Pay
+    from adapters.ram.for_making_payments.pay import Pay
 
     return Pay(_response=exception)
 
@@ -70,7 +70,7 @@ def _get_pay_adapter_with_logging(
     call_log: list[tuple[Decimal, PaymentCard]],
 ) -> PayProtocol:
     """Factory method to create a RAM-based payment adapter that logs calls."""
-    from adapters.ram.for_making_payments import Pay
+    from adapters.ram.for_making_payments.pay import Pay
 
     def log_call(euros: Decimal, payment_card: PaymentCard) -> None:
         call_log.append((euros, payment_card))
