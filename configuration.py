@@ -4,7 +4,6 @@ from decimal import Decimal
 from domain.rate import Rate
 
 import site
-from taew.domain.logging import INFO
 from domain.payment_card import PaymentCard
 from taew.domain.configuration import PortConfigurationDict, PortsMapping
 from taew.adapters.python.inspect.for_browsing_code_tree.root import Root
@@ -13,6 +12,9 @@ from taew.adapters.python.pickle.for_serializing_objects.for_configuring_adapter
 )
 from taew.adapters.python.json.for_stringizing_objects.for_configuring_adapters import (
     Configure as ConfigureJSON,
+)
+from taew.adapters.python.logging.for_logging.for_configuring_adapters import (
+    Configure as ConfigureLogging,
 )
 from adapters.dir.for_storing_tickets.for_configuring_adapters import (
     Configure as ConfigureTickets,
@@ -27,7 +29,6 @@ from ports import (
     for_parking_inspectors,
 )
 from taew.ports import (
-    for_logging,
     for_starting_programs,
     for_stringizing_objects,
     for_binding_interfaces,
@@ -40,23 +41,6 @@ TICKETS_FOLDER = Path("/tmp/tickets")
 TAEW_ROOT = site.getsitepackages()[0]
 
 
-def _config_logger(name: str) -> PortsMapping:
-    return {
-        for_logging: PortConfigurationDict(
-            adapter="taew.adapters.python.logging",
-            root=TAEW_ROOT,
-            kwargs=dict(
-                name=name,
-                config=dict(
-                    level=INFO,
-                    format="{levelname}:{message}",
-                    style="{",
-                ),
-            ),
-        )
-    }
-
-
 ports: PortsMapping = (
     {  # type: ignore[assignment]
         for_making_payments: "adapters.ram",
@@ -67,11 +51,11 @@ ports: PortsMapping = (
         for_car_drivers: PortConfigurationDict(
             adapter="workflows",
             kwargs=dict(_min_euros=Decimal("0.50")),
-            ports=_config_logger("Port: for_car_drivers"),
+            ports=ConfigureLogging(_name="Port: for_car_drivers")(),
         ),
         for_parking_inspectors: PortConfigurationDict(
             adapter="workflows",
-            ports=_config_logger("Port: for_parking_inspectors"),
+            ports=ConfigureLogging(_name="Port: for_parking_inspectors")(),
         ),
     }
     | ConfigureRates(
