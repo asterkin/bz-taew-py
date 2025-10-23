@@ -42,7 +42,7 @@ def _get_tickets_repository(
 
 def _get_now_adapter(test_datetime: datetime) -> NowProtocol:
     """Factory method to create a RAM-based datetime adapter with specific timestamp."""
-    from taew.adapters.python.ram.for_obtaining_current_datetime import Now
+    from taew.adapters.python.ram.for_obtaining_current_datetime.now import Now
 
     return Now(_now=test_datetime)
 

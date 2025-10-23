@@ -80,7 +80,7 @@ def _get_pay_adapter_with_logging(
 
 def _get_now_adapter() -> NowProtocol:
     """Factory method to create a RAM-based datetime adapter with specific timestamp."""
-    from taew.adapters.python.ram.for_obtaining_current_datetime import Now
+    from taew.adapters.python.ram.for_obtaining_current_datetime.now import Now
 
     # Use a specific timestamp for deterministic testing
     test_datetime = datetime(2024, 1, 15, 10, 30, 0)

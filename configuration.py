@@ -16,6 +16,9 @@ from taew.adapters.python.json.for_stringizing_objects.for_configuring_adapters 
 from taew.adapters.python.logging.for_logging.for_configuring_adapters import (
     Configure as ConfigureLogging,
 )
+from taew.adapters.python.ram.for_obtaining_current_datetime.for_configuring_adapters import (
+    Configure as ConfigureCurrentDateTime,
+)
 from adapters.dir.for_storing_tickets.for_configuring_adapters import (
     Configure as ConfigureTickets,
 )
@@ -33,7 +36,6 @@ from taew.ports import (
     for_stringizing_objects,
     for_binding_interfaces,
     for_building_command_parsers,
-    for_obtaining_current_datetime,
 )
 
 # Configuration constants
@@ -44,10 +46,6 @@ TAEW_ROOT = site.getsitepackages()[0]
 ports: PortsMapping = (
     {  # type: ignore[assignment]
         for_making_payments: "adapters.ram",
-        for_obtaining_current_datetime: PortConfigurationDict(
-            adapter="taew.adapters.python.datetime",
-            root=TAEW_ROOT,
-        ),
         for_car_drivers: PortConfigurationDict(
             adapter="workflows",
             kwargs=dict(_min_euros=Decimal("0.50")),
@@ -58,6 +56,7 @@ ports: PortsMapping = (
             ports=ConfigureLogging(_name="Port: for_parking_inspectors")(),
         ),
     }
+    | ConfigureCurrentDateTime()()
     | ConfigureRates(
         Blue=Rate(name="Blue", euros_per_hour=Decimal("0.80")),
         Green=Rate(name="Green", euros_per_hour=Decimal("0.85")),
