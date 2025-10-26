@@ -3,19 +3,10 @@ from datetime import date
 from decimal import Decimal
 from domain.rate import Rate
 
-import site
-from domain.payment_card import PaymentCard
-from taew.domain.configuration import PortConfigurationDict, PortsMapping
 from taew.utils.ports import build
 from taew.adapters.python.inspect.for_browsing_code_tree.root import Root
 from taew.adapters.python.pickle.for_serializing_objects.for_configuring_adapters import (
     Configure as ConfigurePickle,
-)
-from taew.adapters.python.json.for_stringizing_objects.for_configuring_adapters import (
-    Configure as ConfigureJSON,
-)
-from taew.adapters.python.decimal.for_stringizing_objects.for_configuring_adapters import (
-    Configure as ConfigureDecimal,
 )
 from taew.adapters.python.ram.for_obtaining_current_datetime.for_configuring_adapters import (
     Configure as ConfigureCurrentDateTime,
@@ -35,18 +26,28 @@ from workflows.for_car_drivers.for_configuring_adapters import (
 from workflows.for_parking_inspectors.for_configuring_adapters import (
     Configure as ConfigureParkingInspectors,
 )
-
-from taew.ports import (
-    for_starting_programs,
-    for_stringizing_objects,
-    for_binding_interfaces,
-    for_building_command_parsers,
+from taew.adapters.launch_time.for_binding_interfaces.for_configuring_adapters import (
+    Configure as ConfigureBindingInterfaces,
 )
+from taew.adapters.cli.for_starting_programs.for_configuring_adapters import (
+    Configure as ConfigureCLI,
+)
+from taew.adapters.python.pprint.for_stringizing_objects.for_configuring_adapters import (
+    Configure as ConfigurePPrint,
+)
+from taew.adapters.python.argparse.for_building_command_parsers.for_configuring_adapters import (
+    Configure as ConfigureArgparse,
+)
+from taew.adapters.python.dataclass.for_finding_configurations.for_configuring_adapters import (
+    Configure as ConfigureFindConfigurations,
+)
+from taew.adapters.python.typing.for_building_config_ports_mapping.for_configuring_adapters import (
+    Configure as ConfigureBuildConfigPortsMapping,
+)
+
 
 # Configuration constants
 TICKETS_FOLDER = Path("/tmp/tickets")
-TAEW_ROOT = site.getsitepackages()[0]
-
 
 ports = build(
     ConfigureMakingPayments(),
@@ -67,45 +68,20 @@ ports = build(
 )
 
 ports_root = Root(Path("./"))
-
-launch_ports: PortsMapping = {
-    for_starting_programs: PortConfigurationDict(
-        adapter="taew.adapters.cli",
-        root=TAEW_ROOT,
-        kwargs=dict(
-            _root=ports_root["adapters"]["cli"],  # type: ignore
-            _ports=ports,
-        ),
-        ports={
-            for_binding_interfaces: PortConfigurationDict(
-                adapter="taew.adapters.launch_time",
-                root=TAEW_ROOT,
-                kwargs=dict(_root=ports_root),
-            ),
-        },
+launch_ports = build(
+    ConfigureBindingInterfaces(
+        _root=ports_root,
     ),
-    for_binding_interfaces: PortConfigurationDict(
-        adapter="taew.adapters.launch_time",
-        root=TAEW_ROOT,
-        kwargs=dict(_root=ports_root),
+    ConfigureCLI(
+        _root=ports_root["adapters"]["cli"],  # type: ignore
+        _ports_mapping=ports,
     ),
-    for_stringizing_objects: PortConfigurationDict(
-        adapter="taew.adapters.python.pprint",
-        root=TAEW_ROOT,
+    ConfigurePPrint(),
+    ConfigureArgparse(),
+    ConfigureFindConfigurations(),
+    ConfigureBuildConfigPortsMapping(
+        _variants={
+            date: {"_variant": "isoformat", "_format": "%m/%y"},
+        }
     ),
-    for_building_command_parsers: PortConfigurationDict(
-        adapter="taew.adapters.python.argparse",
-        root=TAEW_ROOT,
-        ports={
-            for_stringizing_objects: PortConfigurationDict(
-                adapter={
-                    Decimal: ConfigureDecimal()()[for_stringizing_objects],
-                    PaymentCard: ConfigureJSON(
-                        _type=PaymentCard,
-                        _variants={date: {"_variant": "isoformat", "_format": "%m/%y"}},
-                    )()[for_stringizing_objects],
-                }
-            )
-        },
-    ),
-}
+)
