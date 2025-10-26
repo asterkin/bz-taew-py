@@ -26,7 +26,7 @@ from taew.adapters.python.io.bytesio.for_serializing_objects.for_configuring_ada
 from adapters.dir.for_storing_tickets.for_configuring_adapters import (
     Configure as ConfigureTickets,
 )
-from taew.adapters.launch_time.for_binding_interfaces import Bind
+from taew.adapters.launch_time.for_binding_interfaces.bind import Bind
 from domain.ticket import Ticket
 from ports.for_storing_tickets import MutableTicketsRepository, TicketsRepository
 

@@ -1,6 +1,6 @@
 [project]
 name = "bluezone-py"
-version = "0.5.0"
+version = "0.6.0"
 description = "Canonical 'Ports and Adapters' application developed on the top of taew-py libarary"
 authors = [{ name = "Asher Sterkin", email = "asher.sterkin@gmail.com" }]
 readme = "README.md"
