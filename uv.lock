@@ -4,7 +4,7 @@ requires-python = ">=3.14"
 
 [[package]]
 name = "bluezone-py"
-version = "0.5.0"
+version = "0.6.0"
 source = { virtual = "." }
 dependencies = [
     { name = "faker" },
@@ -187,8 +187,8 @@ wheels = [
 
 [[package]]
 name = "taew"
-version = "2.10.5"
-source = { git = "https://github.com/asterkin/taew-py.git?branch=main#7a4ded4b31ec0c11ab5b41cfc8f99e4c3028e288" }
+version = "2.11.0"
+source = { git = "https://github.com/asterkin/taew-py.git?branch=main#8cc726537b2e084311eb7127631d38f601ef0be4" }
 dependencies = [
     { name = "docstring-parser" },
 ]
