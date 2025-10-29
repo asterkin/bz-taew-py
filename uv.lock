@@ -187,8 +187,8 @@ wheels = [
 
 [[package]]
 name = "taew"
-version = "2.12.0"
-source = { git = "https://github.com/asterkin/taew-py.git?branch=main#247d8fa901fddc86ffb70be0b97ac741aa6094c8" }
+version = "2.13.4"
+source = { git = "https://github.com/asterkin/taew-py.git?branch=main#df0e20eb65b54c5579c7b93e97e2643df293f5e4" }
 dependencies = [
     { name = "docstring-parser" },
 ]
