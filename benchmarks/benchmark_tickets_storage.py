@@ -5,7 +5,6 @@ import shutil
 from typing import Any, cast
 from pathlib import Path
 from datetime import datetime
-from taew.adapters.python.inspect.for_browsing_code_tree.root import Root
 
 from benchmarks.fake_tickets import generate_fake_tickets
 from taew.adapters.python.pickle.for_serializing_objects.for_configuring_adapters import (
@@ -26,14 +25,18 @@ from taew.adapters.python.io.bytesio.for_serializing_objects.for_configuring_ada
 from adapters.dir.for_storing_tickets.for_configuring_adapters import (
     Configure as ConfigureTickets,
 )
-from taew.adapters.launch_time.for_binding_interfaces.bind import Bind
+from taew.adapters.python.inspect.for_browsing_code_tree.for_configuring_adapters import (
+    Configure as BrowseCodeTree,
+)
 from domain.ticket import Ticket
+from taew.adapters.launch_time.for_binding_interfaces import bind
 from ports.for_storing_tickets import MutableTicketsRepository, TicketsRepository
 
 
 # Benchmark configuration
 TICKET_COUNT = 10_000
 BENCHMARK_DIR = Path("/tmp/benchmark-tickets")
+ROOT_CONFIG = BrowseCodeTree(_root_path=Path.cwd())()
 
 
 def get_directory_size(path: Path) -> int:
@@ -78,9 +81,8 @@ def benchmark_configuration(
         _key_type=str,
     )
 
-    config = configure()
+    config = configure() | ROOT_CONFIG
     # Bind the repository
-    bind = Bind(Root(Path("./")))
     repo = bind(MutableTicketsRepository, config)
 
     # Generate test data

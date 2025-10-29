@@ -4,7 +4,6 @@ from decimal import Decimal
 from domain.rate import Rate
 
 from taew.utils.cli import configure
-from taew.adapters.python.inspect.for_browsing_code_tree.root import Root
 from taew.adapters.python.pickle.for_serializing_objects.for_configuring_adapters import (
     Configure as Pickle,
 )
@@ -30,10 +29,8 @@ from workflows.for_parking_inspectors.for_configuring_adapters import (
 
 # Configuration constants
 TICKETS_FOLDER = Path("/tmp/tickets")
-ports_root = Root(Path("./"))
 
-launch_ports = configure(
-    ports_root,
+adapters = configure(
     MakingPayments(),
     CarDrivers(_min_euros=Decimal("0.50")),
     ParkingInspectors(),
