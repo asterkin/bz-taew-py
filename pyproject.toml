@@ -1,7 +1,7 @@
 [project]
-name = "bluezone-py"
+name = "bz-taew-py"
 version = "0.8.0"
-description = "Canonical 'Ports and Adapters' application developed on the top of taew-py libarary"
+description = "Canonical 'Ports and Adapters' application developed on the top of taew-py library"
 authors = [{ name = "Asher Sterkin", email = "asher.sterkin@gmail.com" }]
 readme = "README.md"
 license = { text = "MIT" }

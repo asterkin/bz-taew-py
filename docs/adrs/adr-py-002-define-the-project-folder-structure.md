@@ -22,7 +22,7 @@ This structure must also align with Pythonic conventions while remaining faithfu
 
 The Python implementation of the BlueZone project will use the following top-level folder structure:
 
-bluezone-app-py/
+bz-taew-py/
 ├── adapters/
 │   ├── aws/ - adapters per cloud platform vendor
 │   ├── gcp/
