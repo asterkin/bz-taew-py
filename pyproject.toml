@@ -1,6 +1,6 @@
 [project]
 name = "bz-taew-py"
-version = "0.8.0"
+version = "0.8.1"
 description = "Canonical 'Ports and Adapters' application developed on the top of taew-py library"
 authors = [{ name = "Asher Sterkin", email = "asher.sterkin@gmail.com" }]
 readme = "README.md"
