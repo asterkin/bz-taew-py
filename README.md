@@ -1,4 +1,4 @@
-# bluezone-app-py
+# bz-taew-py
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Docs](https://img.shields.io/badge/docs-📘%20available-blue)](./docs/README.md)

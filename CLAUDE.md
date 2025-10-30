@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is the **bluezone-app-py** project - a Python implementation of the BlueZone parking ticket application, showcasing the "Ports and Adapters" architecture pattern. This project builds upon the [bluezone-app](https://github.com/asterkin/bluezone-app) repository (included as a subtree under `common/`) and uses the [taew-py](https://github.com/asterkin/taew-py) library for the Ports & Adapters framework.
+This is the **bz-taew-py** project - a Python implementation of the BlueZone parking ticket application, showcasing the "Ports and Adapters" architecture pattern. This project builds upon the [bluezone-app](https://github.com/asterkin/bluezone-app) repository (included as a subtree under `common/`) and uses the [taew-py](https://github.com/asterkin/taew-py) library for the Ports & Adapters framework.
 
 ## Development Commands
 
@@ -84,7 +84,7 @@ For deep dive into taew framework architecture, see [taew-py CLAUDE.md](https://
 ### Project Structure
 
 ```
-bluezone-app-py/
+bz-taew-py/
 ├── domain/              # BlueZone domain models
 │   ├── payment_card.py  # Payment card value object
 │   ├── rate.py          # Parking rate value object
