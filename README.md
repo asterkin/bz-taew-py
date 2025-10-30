@@ -18,7 +18,15 @@ This project is licensed under the MIT License. See the license in the [common](
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit issues, fork the repository, and open pull requests.
+Contributions are welcome! This is an **AI-Native project** - we recommend using [Claude Code](https://claude.ai/code) or similar AI coding assistants when contributing.
+
+Please read our [Contributing Guidelines](./CONTRIBUTING.md) for:
+- Development setup and workflow
+- Code quality standards and architectural patterns
+- Pull request process and merge restrictions
+- How to work effectively with AI assistants
+
+By participating in this project, you agree to abide by our [Code of Conduct](./CODE_OF_CONDUCT.md).
 
 ## Contact
 
