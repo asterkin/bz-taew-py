@@ -101,10 +101,43 @@ bluezone-app-py/
 │   └── ram/             # In-memory storage adapters
 ├── workflows/           # Application workflows (use cases)
 ├── test/                # Unit and integration tests
+├── benchmarks/          # Performance benchmarks
+│   ├── benchmark_tickets_storage.py  # Storage adapter comparisons
+│   └── fake_tickets.py  # Test data generation
 ├── bin/                 # Executable scripts
 │   └── bz               # Main CLI entry point
 ├── configuration.py     # Port-to-adapter wiring configuration
 └── common/              # Shared specifications from bluezone-app (subtree)
+```
+
+### Benchmarks
+
+**Performance Testing** (`benchmarks/`):
+The benchmarks folder contains performance comparisons of different ticket storage configurations, evaluating them across three dimensions:
+
+1. **Configuration Complexity** - How many adapters need to be composed (1-4 rating scale)
+2. **Speed** - Write and read performance per ticket
+3. **Storage Size** - Total and average file sizes
+
+**Current Configurations Tested:**
+- **Pickle** (complexity: 1) - Single adapter, simplest configuration
+- **Pickle + zlib** (complexity: 2) - Compressed pickle
+- **BytesIO** (complexity: 2) - Binary serialization
+- **BytesIO + zlib** (complexity: 3) - Compressed binary
+- **JSON** (complexity: 3) - Human-readable format with datetime variants
+- **JSON + zlib** (complexity: 4) - Compressed JSON
+
+**Benchmark Results:**
+The Pickle serializer emerges as the optimal choice for the current exploratory test setup:
+- **Best configuration simplicity** - Single adapter, no variant configuration needed
+- **Best speed performance** - Fastest read/write operations
+- **Acceptable storage overhead** - Larger file sizes than compressed alternatives, but acceptable trade-off
+
+The benchmark generates 10,000 fake tickets using the Faker library and measures write time, read time, and storage size for each configuration. While compressed formats (zlib) achieve better storage efficiency, they add configuration complexity and performance overhead that outweigh the benefits for this use case.
+
+**Running Benchmarks:**
+```bash
+make benchmark  # Runs all storage configuration benchmarks
 ```
 
 ### Domain Layer
